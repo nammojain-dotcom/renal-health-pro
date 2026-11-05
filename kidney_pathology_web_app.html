@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RenalPath Hub | Comprehensive Kidney Pathology & Integrative Guide</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        teal: {
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            600: '#0d9488',
+                            700: '#0f766e',
+                            800: '#115e59',
+                            900: '#134e4a',
+                        },
+                        navy: {
+                            800: '#0f172a',
+                            900: '#0b0f19',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 3D Flip Card Styles */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        .transform-style-3d {
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .backface-hidden {
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+        /* Custom Scrollbars */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.05);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #0d9488;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-navy-900 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col font-sans transition-colors duration-200">
+
+    <!-- Header / Navigation -->
+    <header class="bg-gradient-to-r from-teal-900 via-teal-800 to-slate-900 text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Brand Title -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('matrix')">
+                    <div class="bg-teal-500 text-slate-900 p-2 rounded-lg font-bold shadow-md">
+                        <i class="fa-solid fa-kidney text-xl"></i>
+                    </div>
+                    <div>
+                        <span class="font-extrabold text-lg sm:text-xl tracking-tight text-teal-200">RenalPath</span>
+                        <span class="text-xs uppercase tracking-widest text-teal-400 block -mt-1 font-semibold">Integrative Hub</span>
+                    </div>
+                </div>
+
+                <!-- Desktop Navigation Tabs -->
+                <nav class="hidden md:flex space-x-1">
+                    <button onclick="switchTab('matrix')" id="nav-matrix" class="nav-btn px-4 py-2 rounded-lg font-medium text-sm transition-all duration-150 flex items-center gap-2">
+                        <i class="fa-solid fa-table-cells"></i> Pathology Matrix
+                    </button>
+                    <button onclick="switchTab('guide')" id="nav-guide" class="nav-btn px-4 py-2 rounded-lg font-medium text-sm transition-all duration-150 flex items-center gap-2">
+                        <i class="fa-solid fa-book-medical"></i> Study Guide
+                    </button>
+                    <button onclick="switchTab('cards')" id="nav-cards" class="nav-btn px-4 py-2 rounded-lg font-medium text-sm transition-all duration-150 flex items-center gap-2">
+                        <i class="fa-solid fa-clone"></i> Flashcards
+                    </button>
+                    <button onclick="switchTab('biomarkers')" id="nav-biomarkers" class="nav-btn px-4 py-2 rounded-lg font-medium text-sm transition-all duration-150 flex items-center gap-2">
+                        <i class="fa-solid fa-flask-vial"></i> Biomarker Staging
+                    </button>
+                </nav>
+
+                <!-- Actions & Dark Mode Toggle -->
+                <div class="flex items-center space-x-3">
+                    <button onclick="toggleDarkMode()" class="p-2 text-teal-200 hover:text-white hover:bg-teal-800 rounded-lg transition" title="Toggle Theme">
+                        <i class="fa-solid fa-moon dark:hidden"></i>
+                        <i class="fa-solid fa-sun hidden dark:inline"></i>
+                    </button>
+                    <button onclick="exportCSV()" class="hidden sm:flex items-center gap-2 bg-teal-600 hover:bg-teal-500 text-white px-3 py-1.5 rounded-lg text-xs font-semibold shadow transition">
+                        <i class="fa-solid fa-download"></i> Export CSV
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Bar -->
+        <div class="md:hidden flex justify-around bg-teal-950/80 backdrop-blur-md px-2 py-2 border-t border-teal-800 text-xs">
+            <button onclick="switchTab('matrix')" id="mob-matrix" class="mob-btn flex flex-col items-center py-1 text-teal-300">
+                <i class="fa-solid fa-table-cells text-base mb-0.5"></i> Matrix
+            </button>
+            <button onclick="switchTab('guide')" id="mob-guide" class="mob-btn flex flex-col items-center py-1 text-teal-300">
+                <i class="fa-solid fa-book-medical text-base mb-0.5"></i> Guide
+            </button>
+            <button onclick="switchTab('cards')" id="mob-cards" class="mob-btn flex flex-col items-center py-1 text-teal-300">
+                <i class="fa-solid fa-clone text-base mb-0.5"></i> Cards
+            </button>
+            <button onclick="switchTab('biomarkers')" id="mob-biomarkers" class="mob-btn flex flex-col items-center py-1 text-teal-300">
+                <i class="fa-solid fa-flask-vial text-base mb-0.5"></i> Lab Staging
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 w-full">
+
+        <!-- ==================== TAB 1: PATHOLOGY MATRIX ==================== -->
+        <section id="tab-matrix" class="tab-content block space-y-4">
+            <!-- Filter Bar -->
+            <div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 space-y-3">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                    <!-- Search Input -->
+                    <div class="relative">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-slate-400 text-sm"></i>
+                        <input type="text" id="matrix-search" oninput="filterMatrix()" placeholder="Search condition, symptom, or treatment..." 
+                               class="w-full pl-9 pr-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-teal-500 focus:outline-none">
+                    </div>
+
+                    <!-- Category Filter -->
+                    <div>
+                        <select id="matrix-category" onchange="filterMatrix()" 
+                                class="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-teal-500 focus:outline-none">
+                            <option value="ALL">All Clinical Categories</option>
+                            <option value="Nephrological">Nephrological (Filters)</option>
+                            <option value="Renal">Renal (Vascular/Tissue)</option>
+                            <option value="Urological">Urological (Drainage/Tract)</option>
+                        </select>
+                    </div>
+
+                    <!-- System Filter -->
+                    <div>
+                        <select id="matrix-system" onchange="filterMatrix()" 
+                                class="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-teal-500 focus:outline-none">
+                            <option value="ALL">All Medical Systems</option>
+                            <option value="allopathy">Allopathy (Modern)</option>
+                            <option value="ayurveda">Ayurveda</option>
+                            <option value="homeopathy">Homeopathy</option>
+                            <option value="unani">Unani</option>
+                            <option value="tms">TMS / Modalities</option>
+                        </select>
+                    </div>
+
+                    <!-- Quick Stats -->
+                    <div class="flex items-center justify-between sm:justify-end gap-3 text-xs text-slate-500 dark:text-slate-400 font-medium">
+                        <span>Showing <strong id="matrix-count" class="text-teal-600 dark:text-teal-400 font-bold">36</strong> conditions</span>
+                        <button onclick="resetFilters()" class="text-slate-500 hover:text-teal-600 underline">Reset</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table Card -->
+            <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden">
+                <div class="overflow-x-auto max-h-[680px]">
+                    <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                        <thead class="bg-slate-100 dark:bg-slate-900/80 sticky top-0 z-10 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-700 dark:text-slate-200">
+                            <tr>
+                                <th class="p-3 w-32">Category</th>
+                                <th class="p-3 w-48">Condition & Subtypes</th>
+                                <th class="p-3 w-64">Clinical Description & Presentation</th>
+                                <th class="p-3 w-56">Allopathic Approach</th>
+                                <th class="p-3 w-48">Ayurvedic Approach</th>
+                                <th class="p-3 w-48">Homeopathic Approach</th>
+                                <th class="p-3 w-48">Unani & Complementary</th>
+                            </tr>
+                        </thead>
+                        <tbody id="matrix-tbody" class="divide-y divide-slate-200 dark:divide-slate-700/60">
+                            <!-- Populated dynamically via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ==================== TAB 2: INTERACTIVE STUDY GUIDE ==================== -->
+        <section id="tab-guide" class="tab-content hidden space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-teal-900 text-white p-5 rounded-xl shadow">
+                <div>
+                    <h2 class="text-xl font-bold text-teal-100">Interactive Clinical Deep-Dive</h2>
+                    <p class="text-xs text-teal-300 mt-1">Explore detailed cell mechanisms, diagnostic lab markers, symptoms, and integrative treatment paths.</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="text-xs text-teal-200 font-medium">Filter Category:</span>
+                    <select id="guide-category" onchange="renderStudyGuide()" class="bg-teal-800 text-white text-xs px-3 py-1.5 rounded-lg border border-teal-700 focus:outline-none">
+                        <option value="ALL">All Pathologies</option>
+                        <option value="Nephrological">Nephrological (Filters)</option>
+                        <option value="Renal">Renal (Vascular/Tissue)</option>
+                        <option value="Urological">Urological (Drainage)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Guide Cards Container -->
+            <div id="guide-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Dynamic Content Generated JS -->
+            </div>
+        </section>
+
+
+        <!-- ==================== TAB 3: FLASHCARDS ==================== -->
+        <section id="tab-cards" class="tab-content hidden space-y-6">
+            <!-- Flashcard Controls Header -->
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
+                <div class="flex items-center gap-3">
+                    <span class="bg-teal-100 dark:bg-teal-900/50 text-teal-800 dark:text-teal-300 px-3 py-1 rounded-full text-xs font-bold">
+                        Card <span id="card-index">1</span> of <span id="card-total">36</span>
+                    </span>
+                    <select id="card-category-filter" onchange="filterFlashcards()" class="text-xs bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg px-2.5 py-1.5">
+                        <option value="ALL">All Categories</option>
+                        <option value="Nephrological">Nephrological</option>
+                        <option value="Renal">Renal</option>
+                        <option value="Urological">Urological</option>
+                    </select>
+                </div>
+
+                <!-- Self Rating Counters -->
+                <div class="flex items-center gap-4 text-xs font-medium">
+                    <span class="text-emerald-600 dark:text-emerald-400"><i class="fa-solid fa-circle-check"></i> Mastered: <strong id="count-mastered">0</strong></span>
+                    <span class="text-amber-600 dark:text-amber-400"><i class="fa-solid fa-rotate"></i> Needs Review: <strong id="count-review">0</strong></span>
+                    <button onclick="resetFlashcardProgress()" class="text-slate-400 hover:text-slate-600 text-xs underline">Reset Stats</button>
+                </div>
+            </div>
+
+            <!-- 3D Flip Card Container -->
+            <div class="flex justify-center my-6">
+                <div class="w-full max-w-xl h-96 perspective-1000 cursor-pointer" onclick="flipCard()">
+                    <div id="flashcard-inner" class="relative w-full h-full transform-style-3d shadow-xl rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+                        <!-- Front Face -->
+                        <div class="absolute inset-0 backface-hidden p-6 flex flex-col justify-between rounded-2xl bg-gradient-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-900">
+                            <div class="flex justify-between items-center border-b border-slate-200 dark:border-slate-700 pb-3">
+                                <span id="card-front-cat" class="text-xs uppercase font-extrabold tracking-wider text-teal-600 dark:text-teal-400">Nephrological</span>
+                                <span class="text-xs text-slate-400"><i class="fa-solid fa-arrow-rotate-right"></i> Click to flip</span>
+                            </div>
+                            <div class="text-center my-auto px-4">
+                                <h3 id="card-front-title" class="text-2xl font-black text-slate-900 dark:text-white mb-2">Chronic Kidney Disease</h3>
+                                <p id="card-front-sub" class="text-xs text-slate-500 dark:text-slate-400 font-mono">Subtypes: Diabetic, Hypertensive</p>
+                            </div>
+                            <div class="text-center text-xs text-slate-400 italic">
+                                Prompt: What are the primary symptoms, lab markers, and multi-system remedies?
+                            </div>
+                        </div>
+
+                        <!-- Back Face -->
+                        <div class="absolute inset-0 backface-hidden rotate-y-180 p-6 flex flex-col justify-between rounded-2xl bg-teal-950 text-white overflow-y-auto">
+                            <div>
+                                <div class="flex justify-between items-center border-b border-teal-800 pb-2 mb-3">
+                                    <h4 id="card-back-title" class="font-bold text-teal-200 text-sm">Clinical Breakdown</h4>
+                                    <span class="text-xs text-teal-400"><i class="fa-solid fa-rotate-left"></i> Flip back</span>
+                                </div>
+                                <div class="space-y-2 text-xs">
+                                    <p><strong><i class="fa-solid fa-microscope text-teal-400"></i> Symptoms:</strong> <span id="card-back-symptoms">Fatigue, leg swelling, nausea</span></p>
+                                    <p><strong><i class="fa-solid fa-vial text-teal-400"></i> Biomarkers:</strong> <span id="card-back-markers">eGFR &lt; 60 mL/min, UACR &gt; 30 mg/g</span></p>
+                                    <hr class="border-teal-800">
+                                    <p><strong><i class="fa-solid fa-pills text-teal-400"></i> Modern (Allopathic):</strong> <span id="card-back-allo">RAAS blockers + SGLT2i</span></p>
+                                    <p><strong><i class="fa-solid fa-leaf text-teal-400"></i> Ayurvedic:</strong> <span id="card-back-ayur">Punarnava, Varuna, Basti</span></p>
+                                    <p><strong><i class="fa-solid fa-mortar-pestle text-teal-400"></i> Homeo & Unani:</strong> <span id="card-back-trad">Lyco, Serum Anguillae / Musaffiyat</span></p>
+                                </div>
+                            </div>
+                            <div class="pt-2 text-right">
+                                <span class="text-[10px] text-teal-400 uppercase tracking-widest font-semibold">Integrative Flashcard</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card Navigation & Self Rating Buttons -->
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <div class="flex items-center space-x-2">
+                    <button onclick="prevCard()" class="px-4 py-2 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 rounded-lg text-sm font-semibold transition">
+                        <i class="fa-solid fa-chevron-left"></i> Prev
+                    </button>
+                    <button onclick="nextCard()" class="px-4 py-2 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 rounded-lg text-sm font-semibold transition">
+                        Next <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button onclick="rateCard('review')" class="px-4 py-2 bg-amber-500/10 text-amber-600 border border-amber-500/30 hover:bg-amber-500/20 rounded-lg text-xs font-bold transition">
+                        <i class="fa-solid fa-rotate-left"></i> Mark Needs Review
+                    </button>
+                    <button onclick="rateCard('mastered')" class="px-4 py-2 bg-emerald-500/10 text-emerald-600 border border-emerald-500/30 hover:bg-emerald-500/20 rounded-lg text-xs font-bold transition">
+                        <i class="fa-solid fa-check"></i> Mark Mastered
+                    </button>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ==================== TAB 4: BIOMARKER STAGING QUICK SEARCH ==================== -->
+        <section id="tab-biomarkers" class="tab-content hidden space-y-6">
+            <div class="bg-white dark:bg-slate-800 p-5 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 space-y-4">
+                <div>
+                    <h2 class="text-lg font-bold text-slate-900 dark:text-white">Diagnostic Biomarker & Staging Quick Search</h2>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Search specific laboratory cutoffs, eGFR criteria, proteinuria parameters, or biopsy staging.</p>
+                </div>
+                
+                <div class="relative">
+                    <i class="fa-solid fa-flask absolute left-3.5 top-3 text-slate-400 text-sm"></i>
+                    <input type="text" id="biomarker-search" oninput="filterBiomarkers()" placeholder="Type marker (e.g. eGFR, proteinuria, anti-dsDNA, KDIGO)..." 
+                           class="w-full pl-10 pr-4 py-2.5 text-sm bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-teal-500 focus:outline-none">
+                </div>
+            </div>
+
+            <!-- Biomarker Cards Grid -->
+            <div id="biomarker-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Dynamic Content via JS -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 py-4 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-500 dark:text-slate-400">
+            <p>RenalPath Hub &copy; Integrated Medical Education Reference. Formatted for Clinical Study & Cross-System Pathology Review.</p>
+        </div>
+    </footer>
+
+    <!-- Comprehensive Data Script -->
+    <script>
+        // Master Database of 36 Kidney Diseases & Pathologies
+        const kidneyData = [
+            {
+                id: 1,
+                category: "Nephrological",
+                name: "Chronic Kidney Disease (CKD)",
+                subtypes: "Diabetic, Hypertensive, Vascular",
+                description: "Gradual long-term degradation of renal function over months or years.",
+                symptoms: "Fatigue, ankle/leg swelling, persistent nausea, metallic taste, nocturia.",
+                allopathy: "RAAS Blockade (ACEi/ARBs) & SGLT2 inhibitors (Empagliflozin); BP & glycemic control.",
+                ayurveda: "Basti (medicated enemas) & herbs: Punarnava, Varuna, Gokshura.",
+                homeopathy: "Serum Anguillae, Lycopodium, Plumbum Metallicum.",
+                unani: "Musaffiyat (blood purifiers), Sharbat-e-Bazoori Motadil.",
+                tms: "Autonomic biofeedback for vascular relaxation.",
+                markers: "eGFR < 60 mL/min/1.73m² for >3 months; UACR > 30 mg/g."
+            },
+            {
+                id: 2,
+                category: "Nephrological",
+                name: "Glomerulonephritis (GN)",
+                subtypes: "Immune-Complex, Pauci-Immune, Anti-GBM",
+                description: "Inflammation or damage to tiny filtering units (glomeruli).",
+                symptoms: "Pink/cola-colored urine (hematuria), foamy urine, hypertension, facial edema.",
+                allopathy: "Pulse IV Methylprednisolone + Cyclophosphamide / Rituximab.",
+                ayurveda: "Sarvato-bhadra Ras & Chandraprabha Vati to calm Pitta.",
+                homeopathy: "Apis Mellifica, Cantharis, Phosphorus.",
+                unani: "Cooling anti-inflammatory syrups & Majoon-e-Ushba.",
+                tms: "Supportive non-pharmacological pain management.",
+                markers: "Active urine sediment with dysmorphic RBCs & RBC casts."
+            },
+            {
+                id: 3,
+                category: "Nephrological",
+                name: "Nephrotic Syndrome",
+                subtypes: "MCD, FSGS, Membranous GN",
+                description: "Severe glomerular protein leakage causing low blood protein & heavy swelling.",
+                symptoms: "Anasarca (total body swelling), severe frothy urine, weight gain, hyperlipidemia.",
+                allopathy: "High-dose oral Prednisone + aggressive Loop Diuretics (Furosemide).",
+                ayurveda: "Trivrit Avleha to purge excess Kapha fluid.",
+                homeopathy: "Apis Mellifica, Terebinthina, Arsenicum Album.",
+                unani: "Diuretic & fluid balancing Unani formulations.",
+                tms: "Complementary fluid regulation support.",
+                markers: "Proteinuria > 3.5 g/24hr; Hypoalbuminemia < 3.0 g/dL."
+            },
+            {
+                id: 4,
+                category: "Nephrological",
+                name: "IgA Nephropathy (Berger's Disease)",
+                subtypes: "Primary vs. Secondary (Henoch-Schönlein)",
+                description: "Autoimmune IgA antibody deposition in glomeruli triggering inflammation.",
+                symptoms: "Recurrent dark tea-colored urine during/after respiratory infection, flank pain.",
+                allopathy: "Maximized RAAS blockade + 6-month corticosteroid course.",
+                ayurveda: "Manjistha & Raktashodhaka blood-purifying therapies.",
+                homeopathy: "Thuja Occidentalis, Crotalus Horridus.",
+                unani: "Unani blood purifiers & anti-inflammatory syrups.",
+                tms: "Non-invasive stress reduction therapy.",
+                markers: "Elevated serum IgA levels; Mesangial IgA deposits on biopsy."
+            },
+            {
+                id: 5,
+                category: "Nephrological",
+                name: "Focal Segmental Glomerulosclerosis (FSGS)",
+                subtypes: "NOS, Perihilar, Cellular, Tip, Collapsing",
+                description: "Scattered focal scarring in glomeruli leading to proteinuria & renal decline.",
+                symptoms: "Heavy frothy urine, severe leg swelling, fatigue, rapid weight gain.",
+                allopathy: "Oral Prednisone; Calcineurin inhibitors (Cyclosporine/Tacrolimus).",
+                ayurveda: "Rasayana herbs (Guduchi, Amalaki) to arrest focal scarring.",
+                homeopathy: "Plumbum Metallicum, Silicea, Calcarea Fluorica.",
+                unani: "Deep organ tonics & tissue purifiers.",
+                tms: "Supportive systemic tone regulation.",
+                markers: "Segmental sclerosis on renal biopsy; Podocyte effacement."
+            },
+            {
+                id: 6,
+                category: "Nephrological",
+                name: "Minimal Change Disease (MCD)",
+                subtypes: "Primary/Idiopathic vs. NSAID-induced",
+                description: "Glomerular podocyte foot process fusion; most common nephrotic cause in children.",
+                symptoms: "Sudden explosive swelling (anasarca), frothy urine, loss of appetite.",
+                allopathy: "First-line high-dose oral Prednisone (rapid complete remission).",
+                ayurveda: "Punarnavadi Mandoor to rebalance baseline fluids.",
+                homeopathy: "Apis Mellifica, Baryta Carbonica, Sulphur.",
+                unani: "Mild natural pediatric fluid purifiers.",
+                tms: "Pediatric relaxation modalities.",
+                markers: "Normal light microscopy; Podocyte foot process fusion on EM."
+            },
+            {
+                id: 7,
+                category: "Nephrological",
+                name: "Lupus Nephritis",
+                subtypes: "ISN/RPS Classes I–VI",
+                description: "Glomerular inflammation triggered by Systemic Lupus Erythematosus (SLE).",
+                symptoms: "Foamy urine, hematuria, joint pain, facial butterfly rash, fevers.",
+                allopathy: "Mycophenolate Mofetil (MMF) or IV Cyclophosphamide + Steroids.",
+                ayurveda: "Tikta Basti (bitter enemas) & Ojas-restoring formulas.",
+                homeopathy: "Carbo Vegetabilis, Lachesis, Thuja.",
+                unani: "Visceral cooling & anti-autoimmune formulations.",
+                tms: "Neuromodulation for chronic lupus joint pain.",
+                markers: "ISN/RPS Class IV wire-loop capillary thickening; Low C3/C4."
+            },
+            {
+                id: 8,
+                category: "Nephrological",
+                name: "Interstitial Nephritis",
+                subtypes: "Acute (AIN) vs. Chronic Interstitial",
+                description: "Inflammation of tubulointerstitial space, often due to drug hypersensitivity.",
+                symptoms: "Fever, skin rash, low urine output, nausea after starting new medication.",
+                allopathy: "Immediate cessation of offending drug (NSAIDs/Antibiotics) + Prednisone.",
+                ayurveda: "Neem & Haridra to clear toxic biological heat from tubules.",
+                homeopathy: "Belladonna, Nux Vomica, Sulphur.",
+                unani: "Detoxifying syrups & cooling herbal teas.",
+                tms: "Pain pathway modulation.",
+                markers: "Eosinophiluria; Elevated serum creatinine post-drug exposure."
+            },
+            {
+                id: 9,
+                category: "Nephrological",
+                name: "Henoch-Schönlein Purpura Nephritis",
+                subtypes: "IgA Vasculitis",
+                description: "Systemic IgA vasculitis attacking skin blood vessels and glomeruli.",
+                symptoms: "Purpuric rash on legs/buttocks, abdominal pain, joint swelling, hematuria.",
+                allopathy: "Supportive monitoring; Systemic corticosteroids if severe.",
+                ayurveda: "Rakta-Pitta soothing therapies using Vasa & Chandan.",
+                homeopathy: "Arnica, Rhus Tox, Phosphorus.",
+                unani: "Vascular-cooling herbal formulations.",
+                tms: "Supportive circulatory therapy.",
+                markers: "Palpable purpura; Mesangial IgA immune deposits."
+            },
+            {
+                id: 10,
+                category: "Nephrological",
+                name: "Diffuse Proliferative Lupus GN",
+                subtypes: "Class IV Lupus Nephritis",
+                description: "Severe class IV lupus lesion featuring wire-loop capillary wall thickening.",
+                symptoms: "Rapidly worsening swelling, severe hypertension, dark bloody urine.",
+                allopathy: "High-dose IV Methylprednisolone pulses + MMF/Cyclophosphamide.",
+                ayurveda: "Critical Pitta-shamak rasayanas & enema therapy.",
+                homeopathy: "Arsenicum, Phosphorus, Crotalus Horridus.",
+                unani: "Emergency systemic cooling Unani protocols.",
+                tms: "Adjunctive autonomic regulation.",
+                markers: "Biopsy Class IV wire-loop lesions; Marked hypocomplementemia."
+            },
+            {
+                id: 11,
+                category: "Renal",
+                name: "Acute Kidney Injury (AKI)",
+                subtypes: "Pre-Renal, Intrinsic Renal, Post-Renal",
+                description: "Rapid, sudden drop in filtration function usually reversible if treated early.",
+                symptoms: "Drastic drop in urine output, leg swelling, confusion, shortness of breath.",
+                allopathy: "IV fluids, toxin withdrawal, hemodynamic stabilization, temporary Dialysis.",
+                ayurveda: "Cooling Vata-balancing herbs & fluid adjustments.",
+                homeopathy: "Aconite, Apis, Arsenicum Album.",
+                unani: "Hydrating Unani formulations & renal teas.",
+                tms: "Autonomic recovery support.",
+                markers: "KDIGO: Cr rise ≥ 0.3 mg/dL within 48h or ≥ 1.5x baseline."
+            },
+            {
+                id: 12,
+                category: "Renal",
+                name: "Polycystic Kidney Disease (PKD)",
+                subtypes: "ADPKD (PKD1/2) vs. ARPKD (PKHD1)",
+                description: "Genetic condition causing fluid-filled cysts to enlarge kidneys and destroy tissue.",
+                symptoms: "Hypertension, flank/back pain, enlarged abdomen, hematuria, UTIs.",
+                allopathy: "Tolvaptan (Vasopressin V2 receptor antagonist) to slow cyst growth.",
+                ayurveda: "Kanchanar Guggulu (Granthi-hara anti-cyst therapy).",
+                homeopathy: "Barosma, Calcarea Carbonica, Conium.",
+                unani: "Unani anti-swelling formulations.",
+                tms: "Flank pain neuro-relaxation.",
+                markers: "Ultrasound/CT showing bilateral multiple renal cysts; PKD gene test."
+            },
+            {
+                id: 13,
+                category: "Renal",
+                name: "Diabetic Nephropathy",
+                subtypes: "Kimmelstiel-Wilson Nodular Lesions",
+                description: "Capillary damage caused by long-term high blood sugar levels.",
+                symptoms: "Worsening BP, foamy urine, swelling of feet/hands, nocturia, fatigue.",
+                allopathy: "SGLT2 inhibitors + ACEi/ARBs; strict HbA1c optimization.",
+                ayurveda: "Shilajit, Amalaki, & Asanadi Gana for capillary protection.",
+                homeopathy: "Syzygium Jambolanum, Uranium Nitricum.",
+                unani: "Nephroprotective herbal blends.",
+                tms: "Metonomic autonomic modulation.",
+                markers: "UACR > 30 mg/g; Nodular glomerulosclerosis on biopsy."
+            },
+            {
+                id: 14,
+                category: "Renal",
+                name: "Hypertensive Nephrosclerosis",
+                subtypes: "Benign vs. Malignant Arteriolosclerosis",
+                description: "Kidney damage caused by chronic high blood pressure hardening blood vessels.",
+                symptoms: "Chronically elevated BP; early asymptomatic, progressing to fatigue & edema.",
+                allopathy: "Strict blood pressure control (<130/80 mmHg) using ACEi/ARBs.",
+                ayurveda: "Sarpagandha, Arjuna, & Gokshuradi Guggulu.",
+                homeopathy: "Glonoinum, Baryta Muriatica, Plumbum.",
+                unani: "Vascular-soothing Unani remedies.",
+                tms: "Central sympathetic reduction biofeedback.",
+                markers: "Hyaline arteriolosclerosis on histology; Elevated serum Cr."
+            },
+            {
+                id: 15,
+                category: "Renal",
+                name: "Alport Syndrome",
+                subtypes: "X-linked (COL4A5), AR, AD",
+                description: "Inherited genetic defect in Type IV collagen affecting kidneys, hearing, & vision.",
+                symptoms: "Hematuria, progressive sensorineural hearing loss, lens dislocation.",
+                allopathy: "Early ACE inhibitor initiation to preserve fragile collagen filters.",
+                ayurveda: "Ojas strengthening therapies to support fragile filtration sheets.",
+                homeopathy: "Ferrum Phosphoricum, Carbonaceous remedies.",
+                unani: "Natural mineral revitalizers (Kushta-e-Tila).",
+                tms: "Sensory support therapy.",
+                markers: "Biopsy showing basket-weave split basement membrane."
+            },
+            {
+                id: 16,
+                category: "Renal",
+                name: "Fabry Disease",
+                subtypes: "GLA Gene Mutation",
+                description: "Lysosomal storage disorder causing toxic fatty substance buildup in renal cells.",
+                symptoms: "Burning hand/foot pain (acroparesthesia), angiokeratomas, decreased sweating.",
+                allopathy: "Enzyme Replacement Therapy (ERT) with Agalsidase beta.",
+                ayurveda: "Cleansing deep metabolic fire (Agni) protocols.",
+                homeopathy: "Arsenicum Album, Phosphoric Acid.",
+                unani: "Deep cell purifiers & metabolic syrups.",
+                tms: "Neuropathic pain neuromodulation.",
+                markers: "Low alpha-galactosidase A enzyme activity; Gb3 cell deposits."
+            },
+            {
+                id: 17,
+                category: "Renal",
+                name: "Renal Artery Stenosis",
+                subtypes: "Atherosclerotic vs. Fibromuscular Dysplasia",
+                description: "Narrowing of renal blood vessels triggering severe secondary hypertension.",
+                symptoms: "Refractory high BP, sudden pulmonary edema, declining function with ACEi.",
+                allopathy: "Antiplatelets, Statins, or Percutaneous Renal Artery Stenting.",
+                ayurveda: "Vata-soothing vascular remedies (Prabhakar Vati).",
+                homeopathy: "Secale Cornutum, Cactus Grandiflorus.",
+                unani: "Vascular deobstruents (Ushba).",
+                tms: "Circulatory tone support.",
+                markers: "Renal Doppler Ultrasound peak systolic velocity > 200 cm/s."
+            },
+            {
+                id: 18,
+                category: "Renal",
+                name: "Renal Tubular Acidosis (RTA)",
+                subtypes: "Type 1 (Distal), Type 2 (Proximal), Type 4",
+                description: "Inability of kidney tubules to properly excrete acids, causing blood acidification.",
+                symptoms: "Muscle weakness, bone softening, growth failure in children, kidney stones.",
+                allopathy: "Chronic oral Sodium Bicarbonate or Potassium Citrate alkali therapy.",
+                ayurveda: "Prakriti-tailored alkaline plant ashes (Ksharas).",
+                homeopathy: "Acidum Phosphoricum, Calcarea Phosphorica.",
+                unani: "Systemic cooling alkalizers (Sakat).",
+                tms: "Metabolic pathway support.",
+                markers: "Normal anion gap metabolic acidosis; Urine pH > 5.5 in Type 1."
+            },
+            {
+                id: 19,
+                category: "Renal",
+                name: "Renal Cell Carcinoma",
+                subtypes: "Clear Cell, Papillary, Chromophobe",
+                description: "Malignant tumors originating in the epithelial lining of kidney tubules.",
+                symptoms: "Flank pain, hematuria, palpable abdominal mass, unexplained weight loss.",
+                allopathy: "Partial or Radical Nephrectomy; TKIs or Immunotherapy for metastases.",
+                ayurveda: "Arbuda Chikitsa (Tamra & Hirak Bhasma) as supportive therapy.",
+                homeopathy: "Hydrastis, Conium, Carcinosinum.",
+                unani: "Majoon-e-Ushba anti-neoplastic support.",
+                tms: "Post-operative incisional pain relief.",
+                markers: "CT/MRI solid enhancing renal mass; Histology clear cells."
+            },
+            {
+                id: 20,
+                category: "Renal",
+                name: "Analgesic Nephropathy",
+                subtypes: "NSAID & Aspirin-Induced",
+                description: "Chronic interstitial damage & papillary necrosis from long-term painkiller overuse.",
+                symptoms: "Chronic flank pain, frequent urination, tissue pieces passed in urine.",
+                allopathy: "Complete lifelong avoidance of NSAIDs/Aspirin; strict fluid hydration.",
+                ayurveda: "Yashtimadhu & Shatavari to soothe chemical tubule burns.",
+                homeopathy: "Nux Vomica, Nitric Acid, Sarsaparilla.",
+                unani: "Jawarish Kamuni & Arq-e-Kasni.",
+                tms: "Non-pharmacological musculoskeletal pain therapy.",
+                markers: "CT showing ring shadow Papillary Necrosis; Small scarred kidneys."
+            },
+            {
+                id: 21,
+                category: "Renal",
+                name: "Myeloma Kidney",
+                subtypes: "Light Chain Cast Nephropathy",
+                description: "Toxic monoclonal proteins from Multiple Myeloma forming tubular casts.",
+                symptoms: "Severe bone pain, fatigue, nausea, high calcium levels, low urine volume.",
+                allopathy: "Systemic Chemotherapy + IV hydration + High-cutoff Hemodialysis.",
+                ayurveda: "Supportive care to clear heavy toxic proteins (Aama).",
+                homeopathy: "Symphytum, Eupatorium Perfoliatum.",
+                unani: "Deep penetrative vinegar blends (Sirka).",
+                tms: "Refractory myeloma bone pain TMS therapy.",
+                markers: "Serum Free Light Chain ratio > 100; Bence-Jones proteinuria."
+            },
+            {
+                id: 22,
+                category: "Renal",
+                name: "CINAC (Agricultural Interstitial)",
+                subtypes: "Mesoamerican / Tropical Nephropathy",
+                description: "Environmental tubulopathy in tropical farmworkers from heat & agrochemicals.",
+                symptoms: "Muscle cramping, severe dehydration, progressive fatigue in hot climates.",
+                allopathy: "Immediate removal from toxic agrochemical environments + electrolyte fluids.",
+                ayurveda: "Cooling Usheera & Shatavari demulcents.",
+                homeopathy: "Cuprum Metallicum, Veratrum Album.",
+                unani: "Sharbat-e-Nilofar & cooling mineral waters.",
+                tms: "Autonomic reconditioning post-heat stress.",
+                markers: "Non-proteinuric chronic tubulointerstitial nephritis on biopsy."
+            },
+            {
+                id: 23,
+                category: "Urological",
+                name: "Kidney Stones (Nephrolithiasis)",
+                subtypes: "Calcium Oxalate, Uric Acid, Struvite, Cystine",
+                description: "Mineral & salt deposits forming in renal pelvis causing severe colic pain.",
+                symptoms: "Agonizing flank pain radiating to groin, hematuria, painful urination, nausea.",
+                allopathy: "Tamsulosin (expulsive therapy); Lithotripsy (ESWL) or PCNL surgery.",
+                ayurveda: "Pashanbhed, Kultha (Horse gram), & Varuna (Ashmari-hara).",
+                homeopathy: "Berberis Vulgaris, Lycopodium, Sarsaparilla.",
+                unani: "Hajrul Yahood Bhasma (Mofattet-e-Ashmari).",
+                tms: "Ureteral colic pain modulation.",
+                markers: "Non-contrast CT imaging showing radio-opaque calculus."
+            },
+            {
+                id: 24,
+                category: "Urological",
+                name: "Kidney Infection (Pyelonephritis)",
+                subtypes: "Acute Uncomplicated vs. Chronic",
+                description: "Ascending bacterial infection spreading from bladder up into kidneys.",
+                symptoms: "High fever, shaking chills, severe flank pain, foul cloudy urine, dysuria.",
+                allopathy: "Empiric IV Ceftriaxone / Fluoroquinolones de-escalated via culture.",
+                ayurveda: "Mutravirechaniya diuretic herbs (Chandan, Usheera).",
+                homeopathy: "Cantharis, Mercurius Corrosivus, Aconitum.",
+                unani: "Sharbat-e-Alu-Balu (Daf-e-Ufūnat).",
+                tms: "Supportive systemic tone therapy.",
+                markers: "Urine culture > 10^5 CFU/mL; WBC casts on urinalysis."
+            },
+            {
+                id: 25,
+                category: "Urological",
+                name: "Hydronephrosis",
+                subtypes: "Unilateral vs. Bilateral Obstruction",
+                description: "Swelling of the renal pelvis due to urine outflow obstruction.",
+                symptoms: "Flank pain, altered urination frequency, abdominal fullness, nausea.",
+                allopathy: "Ureteral Stenting or Percutaneous Nephrostomy tube insertion.",
+                ayurveda: "Vata-Anulomana therapies to relieve backpressure.",
+                homeopathy: "Hydrangea arborescens, Pareira Brava.",
+                unani: "Arq-e-Badiyan fluid channels.",
+                tms: "Post-decompression recovery support.",
+                markers: "Ultrasound showing pelvicalyceal dilation."
+            },
+            {
+                id: 26,
+                category: "Urological",
+                name: "Vesicoureteral Reflux (VUR)",
+                subtypes: "Grades I–V Congenital Defect",
+                description: "Abnormal backward flow of urine from bladder up into ureters/kidneys.",
+                symptoms: "Recurrent UTIs in infants/children, unexplained fevers, bedwetting.",
+                allopathy: "Prophylactic Antibiotics; Endoscopic Deflux gel injection or surgery.",
+                ayurveda: "Childhood urinary tonics & Rasayana support.",
+                homeopathy: "Pulsatilla, Belladonna, Cantharis.",
+                unani: "Pelvic muscle tonics (Amraz Sue Tarkeeb).",
+                tms: "Pediatric bladder tone support.",
+                markers: "Voiding Cystourethrogram (VCUG) retrograde flow."
+            },
+            {
+                id: 27,
+                category: "Urological",
+                name: "Obstructive Uropathy",
+                subtypes: "Strictures, Tumors, Anatomical Twists",
+                description: "Any structural blockage stopping urine from draining out of kidneys.",
+                symptoms: "Weak urine stream, dribbling, severe flank ache, abdominal swelling.",
+                allopathy: "Surgical removal of tumor/stricture; Catheterization or Stenting.",
+                ayurveda: "Post-clearance fluid drainage supportive formulas.",
+                homeopathy: "Solidago Virgaurea, Chimaphila Umbellata.",
+                unani: "Kushta-e-Hajrul Yahood deobstruents.",
+                tms: "Pelvic nerve stimulation support.",
+                markers: "CT/MRI showing anatomical mechanical blockage."
+            },
+            {
+                id: 28,
+                category: "Urological",
+                name: "Staghorn Calculus Disease",
+                subtypes: "Struvite (Triple Phosphate) Calculi",
+                description: "Massive branched stone filling the entire renal pelvis; acts as infection hub.",
+                symptoms: "Persistent dull flank pain, recurrent UTIs, cloudy urine, hematuria.",
+                allopathy: "Percutaneous Nephrolithotomy (PCNL) surgical extraction.",
+                ayurveda: "Kshara Parpati to shift urine chemistry post-surgery.",
+                homeopathy: "Calcarea Carbonica, Urtica Urens.",
+                unani: "Hab-e-Kulliya mineral clearing tracking.",
+                tms: "Colic pain management.",
+                markers: "KUB X-ray staghorn branched calculus shadow."
+            },
+            {
+                id: 29,
+                category: "Urological",
+                name: "Xanthogranulomatous Pyelonephritis",
+                subtypes: "XGPN Destructive Variant",
+                description: "Rare destructive chronic infection replacing functional tissue with fatty scars.",
+                symptoms: "Chronic flank pain, low fevers, palpable mass, weight loss, night sweats.",
+                allopathy: "Radical or Partial Nephrectomy surgical removal.",
+                ayurveda: "Post-nephrectomy immune supportive care.",
+                homeopathy: "Hepar Sulphuris, Silicea, Pyrogenium.",
+                unani: "Asal-us-Soos licorice extractions.",
+                tms: "Post-surgical recovery support.",
+                markers: "CT yellow lipid-laden mass replacing kidney."
+            },
+            {
+                id: 30,
+                category: "Urological",
+                name: "Reflux Nephropathy",
+                subtypes: "Scarring secondary to severe VUR",
+                description: "Chronic scarring caused by high-pressure backward urine flow into kidney tissue.",
+                symptoms: "Childhood hypertension, proteinuria, recurrent UTIs, growth retardation.",
+                allopathy: "Surgical ureteral reimplantation + strict BP management.",
+                ayurveda: "Punarnava Rasayana for long-term scar reduction.",
+                homeopathy: "Plumbum Metallicum, Phosphorus.",
+                unani: "Sharbat-e-Bazoori Motadil.",
+                tms: "Autonomic vascular control.",
+                markers: "DMSA renal scan focal cortical scarring."
+            },
+            {
+                id: 31,
+                category: "Nephrological",
+                name: "Dense Deposit Disease (DDD)",
+                subtypes: "MPGN Type II",
+                description: "Complement dysregulation damaging glomerular filtering sheets.",
+                symptoms: "Dark tea-colored urine, swelling, hypertension, low complement levels.",
+                allopathy: "Eculizumab (C5 Inhibitor) + Plasma Exchange (Plasmapheresis).",
+                ayurveda: "Dhatu-protecting herbo-mineral preparations.",
+                homeopathy: "Mercurius Solubilis, Aurum Metallicum.",
+                unani: "Unani cell preservers.",
+                tms: "Supportive immune modulation.",
+                markers: "EM dense intramembranous ribbon deposits; Low C3."
+            },
+            {
+                id: 32,
+                category: "Nephrological",
+                name: "Collapsing Glomerulopathy",
+                subtypes: "HIVAN & Viral-Associated FSGS",
+                description: "Aggressive FSGS sub-variant causing total obliteration of filtering space.",
+                symptoms: "Explosive total body swelling, massive proteinuria, rapid renal failure.",
+                allopathy: "Antiretroviral therapy (HAART for HIV) + High-dose Steroids.",
+                ayurveda: "Krimighna (anti-microbial) herbs (Vidanga) + Ojas rasayanas.",
+                homeopathy: "Acidum Nitricum, Arsenicum Iodatum.",
+                unani: "Deep antiviral support.",
+                tms: "Systemic recovery support.",
+                markers: "Biopsy global capillary collapse & podocyte hypertrophy."
+            },
+            {
+                id: 33,
+                category: "Nephrological",
+                name: "Lipoid Nephrosis",
+                subtypes: "MCD Clinical Manifestation",
+                description: "Primary clinical manifestation of Minimal Change Disease with fused podocytes.",
+                symptoms: "Sudden total-body swelling (anasarca), frothy urine, extreme lethargy.",
+                allopathy: "Standard Glucocorticoid Protocol (oral Prednisone).",
+                ayurveda: "Kapha-Pitta balancing herbs to clear swelling.",
+                homeopathy: "Apis Mellifica, Aceticum Acidum.",
+                unani: "Natural pediatric fluid drainers.",
+                tms: "Pediatric relaxation therapies.",
+                markers: "Complete podocyte foot process fusion on EM."
+            },
+            {
+                id: 34,
+                category: "Renal",
+                name: "Granulomatous Interstitial Nephritis",
+                subtypes: "Sarcoidosis & Sjögren's-Related",
+                description: "Immune system forms hard non-caseating nodules inside kidney tissue.",
+                symptoms: "Asymptomatic Cr rise, low-grade fevers, dry eyes/mouth, fatigue.",
+                allopathy: "Long-term tapered oral Prednisone course.",
+                ayurveda: "Granthi-resolving formulas (Kanchanar Guggulu).",
+                homeopathy: "Silicea, Calcarea Carbonica.",
+                unani: "Nodular dissolvers.",
+                tms: "Immune modulation support.",
+                markers: "Biopsy non-caseating granulomas in renal interstitium."
+            },
+            {
+                id: 35,
+                category: "Renal",
+                name: "Potter Sequence",
+                subtypes: "ARPKD Neonatal Sub-variant",
+                description: "Fatal prenatal sequence: renal failure causes lack of amniotic fluid.",
+                symptoms: "Severe respiratory distress at birth, underdeveloped lungs, limb deformities.",
+                allopathy: "Neonatal comfort palliative care; experimental prenatal amnioinfusions.",
+                ayurveda: "Prenatal supportive counseling & palliative measures.",
+                homeopathy: "Antimonial Tartaricum, Carbo Vegetabilis.",
+                unani: "Asb-e-Atfal comfort protocols.",
+                tms: "Palliative comfort support.",
+                markers: "Prenatal ultrasound severe oligohydramnios & absent kidneys."
+            },
+            {
+                id: 36,
+                category: "Renal",
+                name: "Senior-Løken Syndrome",
+                subtypes: "Ciliary Genetic Mutation",
+                description: "Genetic condition combining Juvenile Nephronophthisis with retinal blindness.",
+                symptoms: "Progressive vision loss, childhood bedwetting, slow growth, anemia.",
+                allopathy: "Supportive chronic kidney care, anemia management, future Transplant.",
+                ayurveda: "Balachikitsa growth support & eye tonics.",
+                homeopathy: "Phosphorus, Physostigma, Causticum.",
+                unani: "Khamira Gaozaban Ambari multi-system tonics.",
+                tms: "Sensory & vision rehabilitation support.",
+                markers: "Retinal dystrophy on fundoscopy; Medullary cysts on ultrasound."
+            }
+        ];
+
+        // State Management
+        let filteredData = [...kidneyData];
+        let currentCardIndex = 0;
+        let cardFlipped = false;
+        let masteredCards = new Set();
+        let reviewCards = new Set();
+
+        // Initialization
+        document.addEventListener('DOMContentLoaded', () => {
+            renderMatrixTable();
+            renderStudyGuide();
+            renderFlashcard();
+            renderBiomarkers();
+            updateCardStats();
+        });
+
+        // Tab Switching Logic
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+
+            // Update Nav Classes
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-teal-700', 'text-white');
+                btn.classList.add('text-teal-200', 'hover:bg-teal-800');
+            });
+            const activeBtn = document.getElementById(`nav-${tabId}`);
+            if (activeBtn) {
+                activeBtn.classList.add('bg-teal-700', 'text-white');
+                activeBtn.classList.remove('text-teal-200');
+            }
+
+            // Mobile Nav
+            document.querySelectorAll('.mob-btn').forEach(btn => btn.classList.remove('text-white', 'font-bold'));
+            const mobActive = document.getElementById(`mob-${tabId}`);
+            if (mobActive) mobActive.classList.add('text-white', 'font-bold');
+        }
+
+        // Dark Mode Toggle
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+        }
+
+        // ==================== TAB 1: MATRIX LOGIC ====================
+        function renderMatrixTable() {
+            const tbody = document.getElementById('matrix-tbody');
+            tbody.innerHTML = '';
+
+            filteredData.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50 dark:hover:bg-slate-700/50 transition";
+                
+                let catBadge = item.category === 'Nephrological' 
+                    ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300' 
+                    : item.category === 'Renal' 
+                    ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300'
+                    : 'bg-purple-100 text-purple-800 dark:bg-purple-900/40 dark:text-purple-300';
+
+                tr.innerHTML = `
+                    <td class="p-3 font-semibold"><span class="px-2 py-1 rounded text-[11px] font-bold ${catBadge}">${item.category}</span></td>
+                    <td class="p-3 font-bold text-slate-900 dark:text-white">
+                        ${item.name}
+                        <div class="text-[11px] font-normal text-slate-500 dark:text-slate-400 mt-0.5">${item.subtypes}</div>
+                    </td>
+                    <td class="p-3 text-xs leading-relaxed">
+                        <p class="font-medium text-slate-800 dark:text-slate-200">${item.description}</p>
+                        <p class="text-slate-500 dark:text-slate-400 mt-1"><strong>Symptoms:</strong> ${item.symptoms}</p>
+                    </td>
+                    <td class="p-3 text-xs text-slate-700 dark:text-slate-300">${item.allopathy}</td>
+                    <td class="p-3 text-xs text-slate-700 dark:text-slate-300">${item.ayurveda}</td>
+                    <td class="p-3 text-xs text-slate-700 dark:text-slate-300">${item.homeopathy}</td>
+                    <td class="p-3 text-xs text-slate-700 dark:text-slate-300">
+                        <div><strong>Unani:</strong> ${item.unani}</div>
+                        <div class="mt-1 text-slate-500"><strong>TMS:</strong> ${item.tms}</div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            document.getElementById('matrix-count').innerText = filteredData.length;
+        }
+
+        function filterMatrix() {
+            const search = document.getElementById('matrix-search').value.toLowerCase();
+            const cat = document.getElementById('matrix-category').value;
+            const system = document.getElementById('matrix-system').value;
+
+            filteredData = kidneyData.filter(item => {
+                const matchesSearch = item.name.toLowerCase().includes(search) || 
+                                      item.symptoms.toLowerCase().includes(search) || 
+                                      item.description.toLowerCase().includes(search) ||
+                                      item.allopathy.toLowerCase().includes(search);
+                
+                const matchesCat = (cat === 'ALL') || (item.category === cat);
+                
+                let matchesSystem = true;
+                if (system === 'allopathy') matchesSystem = !!item.allopathy;
+                if (system === 'ayurveda') matchesSystem = !!item.ayurveda;
+                if (system === 'homeopathy') matchesSystem = !!item.homeopathy;
+                if (system === 'unani') matchesSystem = !!item.unani;
+                if (system === 'tms') matchesSystem = !!item.tms;
+
+                return matchesSearch && matchesCat && matchesSystem;
+            });
+
+            renderMatrixTable();
+        }
+
+        function resetFilters() {
+            document.getElementById('matrix-search').value = '';
+            document.getElementById('matrix-category').value = 'ALL';
+            document.getElementById('matrix-system').value = 'ALL';
+            filteredData = [...kidneyData];
+            renderMatrixTable();
+        }
+
+        function exportCSV() {
+            let csv = 'Category,Condition,Subtypes,Description,Symptoms,Allopathy,Ayurveda,Homeopathy,Unani,Biomarkers\n';
+            kidneyData.forEach(row => {
+                csv += `"${row.category}","${row.name}","${row.subtypes}","${row.description}","${row.symptoms}","${row.allopathy}","${row.ayurveda}","${row.homeopathy}","${row.unani}","${row.markers}"\n`;
+            });
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.setAttribute('href', url);
+            a.setAttribute('download', 'Kidney_Pathology_Matrix.csv');
+            a.click();
+        }
+
+        // ==================== TAB 2: STUDY GUIDE LOGIC ====================
+        function renderStudyGuide() {
+            const container = document.getElementById('guide-container');
+            const catFilter = document.getElementById('guide-category').value;
+            container.innerHTML = '';
+
+            const list = (catFilter === 'ALL') 
+                ? kidneyData 
+                : kidneyData.filter(i => i.category === catFilter);
+
+            list.forEach(item => {
+                const card = document.createElement('div');
+                card.className = "bg-white dark:bg-slate-800 rounded-xl p-5 shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col justify-between space-y-4";
+                
+                card.innerHTML = `
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded bg-teal-100 dark:bg-teal-900/60 text-teal-700 dark:text-teal-300">${item.category}</span>
+                            <span class="text-xs text-slate-400 font-mono">ID #${item.id}</span>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900 dark:text-white">${item.name}</h3>
+                        <p class="text-xs text-teal-600 dark:text-teal-400 font-medium mb-3">${item.subtypes}</p>
+                        
+                        <div class="space-y-2 text-xs text-slate-600 dark:text-slate-300">
+                            <p><strong>Clinical Pathology:</strong> ${item.description}</p>
+                            <p><strong>Presentation:</strong> ${item.symptoms}</p>
+                            <div class="p-2 bg-slate-50 dark:bg-slate-900 rounded border border-slate-200 dark:border-slate-700 font-mono text-[11px] text-teal-700 dark:text-teal-300">
+                                <i class="fa-solid fa-vial"></i> <strong>Diagnostic Markers:</strong> ${item.markers}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-slate-100 dark:border-slate-700/80 pt-3 space-y-1 text-xs">
+                        <p><strong>Modern Allopathic:</strong> ${item.allopathy}</p>
+                        <p><strong>Ayurvedic chikitsa:</strong> ${item.ayurveda}</p>
+                        <p><strong>Homeo & Unani:</strong> ${item.homeopathy} | ${item.unani}</p>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // ==================== TAB 3: FLASHCARDS LOGIC ====================
+        let cardList = [...kidneyData];
+
+        function renderFlashcard() {
+            if (cardList.length === 0) return;
+            const card = cardList[currentCardIndex];
+            
+            // Reset Flip State
+            const inner = document.getElementById('flashcard-inner');
+            inner.classList.remove('rotate-y-180');
+            cardFlipped = false;
+
+            // Front
+            document.getElementById('card-front-cat').innerText = card.category;
+            document.getElementById('card-front-title').innerText = card.name;
+            document.getElementById('card-front-sub').innerText = `Subtypes: ${card.subtypes}`;
+
+            // Back
+            document.getElementById('card-back-title').innerText = card.name;
+            document.getElementById('card-back-symptoms').innerText = card.symptoms;
+            document.getElementById('card-back-markers').innerText = card.markers;
+            document.getElementById('card-back-allo').innerText = card.allopathy;
+            document.getElementById('card-back-ayur').innerText = card.ayurveda;
+            document.getElementById('card-back-trad').innerText = `${card.homeopathy} / ${card.unani}`;
+
+            // Controls Counter
+            document.getElementById('card-index').innerText = currentCardIndex + 1;
+            document.getElementById('card-total').innerText = cardList.length;
+        }
+
+        function flipCard() {
+            const inner = document.getElementById('flashcard-inner');
+            cardFlipped = !cardFlipped;
+            if (cardFlipped) {
+                inner.classList.add('rotate-y-180');
+            } else {
+                inner.classList.remove('rotate-y-180');
+            }
+        }
+
+        function nextCard() {
+            if (currentCardIndex < cardList.length - 1) {
+                currentCardIndex++;
+                renderFlashcard();
+            }
+        }
+
+        function prevCard() {
+            if (currentCardIndex > 0) {
+                currentCardIndex--;
+                renderFlashcard();
+            }
+        }
+
+        function filterFlashcards() {
+            const cat = document.getElementById('card-category-filter').value;
+            cardList = (cat === 'ALL') 
+                ? [...kidneyData] 
+                : kidneyData.filter(i => i.category === cat);
+            
+            currentCardIndex = 0;
+            renderFlashcard();
+        }
+
+        function rateCard(status) {
+            const currentCard = cardList[currentCardIndex];
+            if (status === 'mastered') {
+                masteredCards.add(currentCard.id);
+                reviewCards.delete(currentCard.id);
+            } else {
+                reviewCards.add(currentCard.id);
+                masteredCards.delete(currentCard.id);
+            }
+            updateCardStats();
+            nextCard();
+        }
+
+        function updateCardStats() {
+            document.getElementById('count-mastered').innerText = masteredCards.size;
+            document.getElementById('count-review').innerText = reviewCards.size;
+        }
+
+        function resetFlashcardProgress() {
+            masteredCards.clear();
+            reviewCards.clear();
+            updateCardStats();
+        }
+
+        // ==================== TAB 4: BIOMARKERS LOGIC ====================
+        function renderBiomarkers() {
+            const grid = document.getElementById('biomarker-grid');
+            const search = document.getElementById('biomarker-search')?.value.toLowerCase() || '';
+            grid.innerHTML = '';
+
+            const matches = kidneyData.filter(item => 
+                item.name.toLowerCase().includes(search) || 
+                item.markers.toLowerCase().includes(search)
+            );
+
+            matches.forEach(item => {
+                const box = document.createElement('div');
+                box.className = "bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col justify-between";
+                box.innerHTML = `
+                    <div>
+                        <span class="text-[10px] uppercase font-bold text-teal-600 dark:text-teal-400 tracking-wider">${item.category}</span>
+                        <h4 class="font-bold text-sm text-slate-900 dark:text-white mb-2">${item.name}</h4>
+                        <div class="p-3 bg-slate-50 dark:bg-slate-900 rounded-lg text-xs font-mono text-teal-800 dark:text-teal-200 border border-slate-200 dark:border-slate-700">
+                            ${item.markers}
+                        </div>
+                    </div>
+                    <div class="mt-3 pt-2 border-t border-slate-100 dark:border-slate-700 text-[11px] text-slate-500">
+                        Primary Key Cutoff / Staging Criteria
+                    </div>
+                `;
+                grid.appendChild(box);
+            });
+        }
+
+        function filterBiomarkers() {
+            renderBiomarkers();
+        }
+    </script>
+</body>
+</html>
