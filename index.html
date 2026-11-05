@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kidney Pathology Matrix & Diagnostic Reference Hub</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-teal: #006874;
+            --dark-teal: #004D40;
+            --accent-teal: #00897B;
+            --light-bg: #F4F7F6;
+            --card-border: #E0E0E0;
+            --text-dark: #2C3E50;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--text-dark);
+        }
+
+        /* Navbar Styling */
+        .navbar-custom {
+            background-color: var(--dark-teal);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-tabs .nav-link {
+            color: #B2DFDB;
+            font-weight: 500;
+            border: none;
+            padding: 0.8rem 1.2rem;
+            transition: all 0.2s ease;
+        }
+
+        .nav-tabs .nav-link.active {
+            color: #FFFFFF;
+            background-color: var(--primary-teal);
+            border-bottom: 3px solid #80CBC4;
+            border-radius: 6px 6px 0 0;
+            font-weight: 600;
+        }
+
+        .nav-tabs .nav-link:hover:not(.active) {
+            color: #FFFFFF;
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Hero Header */
+        .hero-banner {
+            background: linear-gradient(135deg, var(--dark-teal) 0%, var(--primary-teal) 100%);
+            color: white;
+            padding: 3rem 1.5rem;
+            border-radius: 0 0 20px 20px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 77, 64, 0.2);
+        }
+
+        .hero-banner h1 {
+            font-weight: 700;
+            font-size: 2.2rem;
+        }
+
+        /* Cards & Container */
+        .card-custom {
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            background-color: white;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card-custom:hover {
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+        }
+
+        /* Table Design */
+        .table-responsive {
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        table thead th {
+            background-color: var(--primary-teal) !important;
+            color: white !important;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+            border: none;
+            padding: 1rem;
+        }
+
+        table tbody td {
+            padding: 0.9rem 1rem;
+            vertical-align: top;
+            font-size: 0.92rem;
+        }
+
+        /* Flashcard 3D Animation */
+        .flashcard-wrapper {
+            perspective: 1000px;
+            height: 360px;
+            cursor: pointer;
+        }
+
+        .flashcard-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+            transform-style: preserve-3d;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+        }
+
+        .flashcard-wrapper.flipped .flashcard-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flashcard-front, .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 16px;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .flashcard-front {
+            background: #FFFFFF;
+            border: 2px solid var(--primary-teal);
+            color: var(--text-dark);
+        }
+
+        .flashcard-back {
+            background-color: var(--dark-teal);
+            color: #FFFFFF;
+            transform: rotateY(180deg);
+            text-align: left;
+            align-items: flex-start;
+            overflow-y: auto;
+        }
+
+        .search-pill {
+            border-radius: 25px;
+            padding-left: 1.25rem;
+            border: 1px solid #B0BEC5;
+        }
+
+        .search-pill:focus {
+            border-color: var(--primary-teal);
+            box-shadow: 0 0 0 0.25rem rgba(0, 104, 116, 0.15);
+        }
+
+        .badge-cat {
+            font-size: 0.75rem;
+            padding: 0.4em 0.8em;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .badge-nephro { background-color: #E0F2F1; color: #004D40; }
+        .badge-renal { background-color: #E8EAF6; color: #1A237E; }
+        .badge-uro { background-color: #FFF3E0; color: #E65100; }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom shadow-sm">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <i class="fa-solid fa-kidneys fa-lg me-2 text-warning"></i>
+                <span>RenalPathologix Hub</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto nav-tabs border-0" id="mainTab" role="tablist">
+                    <li class="nav-item">
+                        <button class="nav-link active" id="matrix-tab-btn" data-bs-toggle="tab" data-bs-target="#matrix-pane" type="button">
+                            <i class="fa-solid fa-table-cells me-1"></i> Pathology Matrix
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" id="biomarkers-tab-btn" data-bs-toggle="tab" data-bs-target="#biomarkers-pane" type="button">
+                            <i class="fa-solid fa-vial me-1"></i> Biomarkers & Staging
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" id="flashcards-tab-btn" data-bs-toggle="tab" data-bs-target="#flashcards-pane" type="button">
+                            <i class="fa-solid fa-cards-blank me-1"></i> Flashcard Deck
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" id="guide-tab-btn" data-bs-toggle="tab" data-bs-target="#guide-pane" type="button">
+                            <i class="fa-solid fa-book-medical me-1"></i> Clinical Guide
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Header Banner -->
+    <div class="hero-banner text-center">
+        <div class="container">
+            <h1 class="mb-2">Kidney Disease Pathology & Multi-System Therapeutics Matrix</h1>
+            <p class="lead mb-3 text-light opacity-90">Comprehensive clinical catalog of 36 renal conditions integrated across Allopathy, Ayurveda, Homeopathy, Unani, and TMS Modalities.</p>
+            <div class="d-flex justify-content-center gap-2 flex-wrap">
+                <span class="badge bg-white text-dark px-3 py-2 rounded-pill shadow-sm"><i class="fa-solid fa-list-check me-1 text-primary"></i> 36 Pathologies</span>
+                <span class="badge bg-white text-dark px-3 py-2 rounded-pill shadow-sm"><i class="fa-solid fa-code-branch me-1 text-success"></i> 5 Integrated Systems</span>
+                <span class="badge bg-white text-dark px-3 py-2 rounded-pill shadow-sm"><i class="fa-solid fa-microscope me-1 text-info"></i> Diagnostic Staging</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Body -->
+    <div class="container-fluid px-4 mb-5">
+        <div class="tab-content" id="mainTabContent">
+            
+            <!-- PANE 1: MASTER PATHOLOGY MATRIX -->
+            <div class="tab-pane fade show active" id="matrix-pane" role="tabpanel">
+                <div class="card card-custom p-4">
+                    <div class="row g-3 align-items-center mb-4">
+                        <div class="col-md-5">
+                            <div class="input-group">
+                                <span class="input-group-text bg-white border-end-0 rounded-start-pill ps-3"><i class="fa-solid fa-magnifying-glass text-muted"></i></span>
+                                <input type="text" id="searchMatrix" class="form-control search-pill border-start-0" placeholder="Search by condition, symptom, or drug...">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <select id="filterCategory" class="form-select rounded-pill">
+                                <option value="All">All Categories (36 Conditions)</option>
+                                <option value="Nephrological">Nephrological (Filtering System)</option>
+                                <option value="Renal">Renal (Systemic, Vascular & Tissue)</option>
+                                <option value="Urological">Urological (Drainage & Tract)</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3 text-end">
+                            <button class="btn btn-outline-success rounded-pill px-4" onclick="exportCSV()">
+                                <i class="fa-solid fa-file-csv me-1"></i> Download Matrix CSV
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0" id="matrixTable">
+                            <thead>
+                                <tr>
+                                    <th>Category</th>
+                                    <th>Condition</th>
+                                    <th>Subtypes / Variants</th>
+                                    <th>Clinical Description</th>
+                                    <th>Key Symptoms</th>
+                                    <th>Allopathic (Modern)</th>
+                                    <th>Ayurvedic</th>
+                                    <th>Homeopathic</th>
+                                </tr>
+                            </thead>
+                            <tbody id="matrixTableBody">
+                                <!-- Dynamic JavaScript Population -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PANE 2: BIOMARKERS & CLINICAL STAGING -->
+            <div class="tab-pane fade" id="biomarkers-pane" role="tabpanel">
+                <div class="card card-custom p-4">
+                    <h4 class="fw-bold text-dark-teal mb-3"><i class="fa-solid fa-chart-line me-2"></i>High-Yield Diagnostic Biomarkers & Clinical Cutoffs</h4>
+                    <p class="text-muted mb-4">Laboratory parameters, urine chemistry thresholds, and biopsy diagnostic criteria for renal diseases.</p>
+                    
+                    <div class="table-responsive">
+                        <table class="table table-striped align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Condition / Pathology</th>
+                                    <th>System Focus</th>
+                                    <th>Key Diagnostic Biomarkers & Tests</th>
+                                    <th>Clinical Thresholds & Staging Criteria</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="fw-bold text-dark-teal">Chronic Kidney Disease (CKD)</td>
+                                    <td><span class="badge badge-cat badge-renal">Renal / Vascular</span></td>
+                                    <td>eGFR, Serum Creatinine, UACR</td>
+                                    <td><span class="badge bg-danger">eGFR < 60 mL/min/1.73m²</span> for >3 months; UACR > 30 mg/g</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold text-dark-teal">Nephrotic Syndrome</td>
+                                    <td><span class="badge badge-cat badge-nephro">Glomerular</span></td>
+                                    <td>24h Urine Protein, Serum Albumin, Lipid Panel</td>
+                                    <td><span class="badge bg-warning text-dark">Heavy Proteinuria >3.5 g/24h</span>; Hypoalbuminemia <3.0 g/dL</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold text-dark-teal">Glomerulonephritis</td>
+                                    <td><span class="badge badge-cat badge-nephro">Glomerular</span></td>
+                                    <td>Urine Sediment (Dysmorphic RBCs, RBC Casts), Serum C3/C4</td>
+                                    <td>Nephritic Urine Sediment; RBC casts under microscopy</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold text-dark-teal">Lupus Nephritis</td>
+                                    <td><span class="badge badge-cat badge-nephro">Glomerular / Immune</span></td>
+                                    <td>Anti-dsDNA, Low C3/C4, Renal Biopsy</td>
+                                    <td>ISN/RPS Classes I–VI; Class IV Wire-Loop Capillary lesions</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold text-dark-teal">Diabetic Nephropathy</td>
+                                    <td><span class="badge badge-cat badge-renal">Metabolic</span></td>
+                                    <td>Urine Albumin Excretion (UACR), HbA1c</td>
+                                    <td>Microalbuminuria (30-300 mg/d) → Macroalbuminuria (>300 mg/d)</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold text-dark-teal">Acute Kidney Injury (AKI)</td>
+                                    <td><span class="badge badge-cat badge-renal">Systemic</span></td>
+                                    <td>Serum Creatinine, BUN, Urine Output</td>
+                                    <td>KDIGO Criteria: Cr rise ≥0.3 mg/dL in 48h or ≥1.5x baseline</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold text-dark-teal">Renal Tubular Acidosis (RTA)</td>
+                                    <td><span class="badge badge-cat badge-renal">Tubular</span></td>
+                                    <td>Serum Bicarbonate, Urine pH, Urine Anion Gap</td>
+                                    <td>Normal Anion Gap Metabolic Acidosis; Urine pH > 5.5 in Type 1</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold text-dark-teal">Myeloma Kidney</td>
+                                    <td><span class="badge badge-cat badge-renal">Tissue / Cast</span></td>
+                                    <td>Serum Free Light Chains (κ/λ), UPEP</td>
+                                    <td>Bence-Jones proteinuria; Free Light Chain Ratio > 100</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold text-dark-teal">Kidney Stones (Nephrolithiasis)</td>
+                                    <td><span class="badge badge-cat badge-uro">Urological</span></td>
+                                    <td>24h Urine Ca/Oxalate/Uric Acid, Non-contrast CT</td>
+                                    <td>Hypercalciuria, Hypocitraturia; Non-contrast CT density</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PANE 3: INTERACTIVE FLASHCARD DECK -->
+            <div class="tab-pane fade" id="flashcards-pane" role="tabpanel">
+                <div class="row justify-content-center">
+                    <div class="col-md-7">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-dark text-white px-3 py-2 rounded-pill fs-6" id="cardCounter">Card 1 of 36</span>
+                            <div>
+                                <button class="btn btn-outline-secondary rounded-circle me-1" onclick="prevCard()"><i class="fa-solid fa-chevron-left"></i></button>
+                                <button class="btn btn-outline-secondary rounded-circle" onclick="nextCard()"><i class="fa-solid fa-chevron-right"></i></button>
+                            </div>
+                        </div>
+
+                        <div class="flashcard-wrapper" id="flashcard" onclick="flipCard()">
+                            <div class="flashcard-inner">
+                                <div class="flashcard-front">
+                                    <span class="badge badge-cat badge-nephro mb-3" id="cardCategory">Nephrological</span>
+                                    <h2 class="fw-bold text-dark-teal" id="cardTitle">Chronic Kidney Disease (CKD)</h2>
+                                    <p class="text-muted mt-3"><i class="fa-solid fa-rotate me-1"></i> Click anywhere on card to flip</p>
+                                </div>
+                                <div class="flashcard-back">
+                                    <h6 class="fw-bold text-warning mb-2" id="cardSubtypes">Subtypes: N/A</h6>
+                                    <p class="small mb-2"><strong>Symptoms:</strong> <span id="cardSymptoms">Fatigue, leg swelling, nausea</span></p>
+                                    <hr class="w-100 my-2 opacity-25">
+                                    <p class="small mb-1"><strong>Allopathic:</strong> <span id="cardAllopathic">RAAS blockers, SGLT2i</span></p>
+                                    <p class="small mb-1"><strong>Ayurvedic:</strong> <span id="cardAyurvedic">Punarnava, Gokshura, Basti</span></p>
+                                    <p class="small mb-0"><strong>Homeopathic:</strong> <span id="cardHomeopathic">Serum Anguillae, Lycopodium</span></p>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-center text-muted small mt-3">Click the card to reveal multi-system remedies and clinical presentations.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PANE 4: CLINICAL STUDY GUIDE -->
+            <div class="tab-pane fade" id="guide-pane" role="tabpanel">
+                <div class="card card-custom p-4">
+                    <h4 class="fw-bold text-dark-teal mb-3"><i class="fa-solid fa-book-open-reader me-2"></i>Comprehensive Clinical Review Modules</h4>
+                    
+                    <div class="accordion" id="studyAccordion">
+                        <div class="accordion-item border-0 mb-3 shadow-sm rounded">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button rounded" type="button" data-bs-toggle="collapse" data-bs-target="#mod1">
+                                    <i class="fa-solid fa-filter me-2 text-primary"></i> Module 1: Glomerular vs. Tubular Filter Disorders
+                                </button>
+                            </h2>
+                            <div id="mod1" class="accordion-collapse collapse show" data-bs-parent="#studyAccordion">
+                                <div class="accordion-body">
+                                    <strong>Glomerular pathologies</strong> primarily damage the podocytes and basement membranes. <em>Nephrotic syndrome</em> is characterized by heavy proteinuria (>3.5g/24h), severe widespread swelling (anasarca), hypoalbuminemia, and hyperlipidemia. Major entities include Minimal Change Disease (MCD) and Focal Segmental Glomerulosclerosis (FSGS). <em>Nephritic syndrome</em> involves active inflammation of glomeruli, dysmorphic RBCs, hematuria, and hypertension (e.g., Glomerulonephritis, Lupus Nephritis).
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="accordion-item border-0 mb-3 shadow-sm rounded">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed rounded" type="button" data-bs-toggle="collapse" data-bs-target="#mod2">
+                                    <i class="fa-solid fa-heart-pulse me-2 text-danger"></i> Module 2: Hemodynamic Protection in Chronic Kidney Disease
+                                </button>
+                            </h2>
+                            <div id="mod2" class="accordion-collapse collapse" data-bs-parent="#studyAccordion">
+                                <div class="accordion-body">
+                                    In progressive parenchymal loss (CKD, Diabetic Nephropathy, Hypertensive Nephrosclerosis), the primary standard of care centers on controlling intraglomerular hydrostatic pressure. <strong>ACE inhibitors / ARBs</strong> selectively dilate efferent arterioles, dropping intraglomerular pressure and reducing proteinuria. <strong>SGLT2 inhibitors</strong> act via tubuloglomerular feedback to induce afferent arteriolar vasoconstriction, providing synergistic cardiorenal protection.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item border-0 shadow-sm rounded">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed rounded" type="button" data-bs-toggle="collapse" data-bs-target="#mod3">
+                                    <i class="fa-solid fa-cubes me-2 text-warning"></i> Module 3: Multi-System Therapeutic Integrations
+                                </button>
+                            </h2>
+                            <div id="mod3" class="accordion-collapse collapse" data-bs-parent="#studyAccordion">
+                                <div class="accordion-body">
+                                    Complementary medical frameworks target metabolic waste clearing (*Aama*) and systemic fluid balance. Ayurvedic protocols deploy *Rasayana* herbs (*Punarnava*, *Gokshura*, *Varuna*) and *Basti* detox, while Unani remedies utilize stone-disintegrating (*Mofattet-e-Ashmari*) formulations like *Hajrul Yahood Bhasma*.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const matrixData = [
+            { category: "Nephrological", condition: "Chronic Kidney Disease (CKD)", subtypes: "N/A", description: "Gradual degradation of renal function over months or years.", symptoms: "Fatigue, leg swelling, persistent nausea, itching", allopathic: "RAAS blockers, SGLT2i", ayurvedic: "Punarnava, Gokshura, Basti", homeopathic: "Serum Anguillae, Lycopodium" },
+            { category: "Nephrological", condition: "Glomerulonephritis", subtypes: "Immune-Complex, Anti-GBM", description: "Inflammation of tiny filtering units (glomeruli).", symptoms: "Pink/cola urine, foamy urine, hypertension", allopathic: "Pulse Corticosteroids, Cyclophosphamide", ayurvedic: "Sarvato-bhadra Ras, Chandraprabha Vati", homeopathic: "Apis, Cantharis, Phosphorus" },
+            { category: "Nephrological", condition: "Nephrotic Syndrome", subtypes: "MCD, FSGS, Membranous", description: "Severe protein leakage into urine leading to heavy edema.", symptoms: "Anasarca, frothy urine, weight gain", allopathic: "Oral Prednisone, Loop diuretics", ayurvedic: "Trivrit Avleha, Kapha balancing", homeopathic: "Apis Mellifica, Terebinthina" },
+            { category: "Nephrological", condition: "IgA Nephropathy (Berger's)", subtypes: "Primary vs Secondary", description: "Autoimmune buildup of IgA antibodies damaging tissue.", symptoms: "Dark tea-colored urine after URIs, flank pain", allopathic: "Maximized RAAS blockade, Steroids", ayurvedic: "Manjistha, Sariva (Raktashodhaka)", homeopathic: "Individualized per hematuria triggers" },
+            { category: "Nephrological", condition: "FSGS", subtypes: "NOS, Tip, Collapsing", description: "Focal scarring in glomeruli causing severe proteinuria.", symptoms: "Heavy foaming urine, severe leg swelling", allopathic: "Prednisone, Cyclosporine, Tacrolimus", ayurvedic: "Guduchi, Amalaki (Rasayana)", homeopathic: "Plumbum Metallicum, Silicea" },
+            { category: "Nephrological", condition: "Minimal Change Disease", subtypes: "Primary vs Secondary", description: "Glomerular basement membrane damage in children.", symptoms: "Sudden weight gain, severe swelling", allopathic: "High-dose oral Prednisone", ayurvedic: "Punarnavadi Mandoor", homeopathic: "Apis, Baryta Carb, Sulphur" },
+            { category: "Nephrological", condition: "Lupus Nephritis", subtypes: "ISN/RPS Classes I-VI", description: "Kidney inflammation triggered by Systemic Lupus (SLE).", symptoms: "Foamy urine, joint pain, butterfly rash", allopathic: "Mycophenolate (MMF), Cyclophosphamide", ayurvedic: "Tikta Basti, Ojas formulas", homeopathic: "Carbo Veg, Lachesis, Thuja" },
+            { category: "Renal", condition: "Acute Kidney Injury (AKI)", subtypes: "Pre-Renal, Intrinsic, Post-Renal", description: "Rapid sudden drop in kidney function.", symptoms: "Drop in urine output, swelling, confusion", allopathic: "IV fluids/diuretics, CRRT/dialysis", ayurvedic: "Vata-Pitta cooling protocols", homeopathic: "Aconitum, Arsenicum, Carbo Veg" },
+            { category: "Renal", condition: "Polycystic Kidney Disease (PKD)", subtypes: "ADPKD (PKD1/2) vs ARPKD", description: "Genetic disorder with fluid cysts enlarging kidneys.", symptoms: "High BP, flank pain, hematuria, stones", allopathic: "Tolvaptan, RAAS blockade", ayurvedic: "Kanchanar Guggulu (Granthi-hara)", homeopathic: "Barosma, Calcarea Carb, Conium" },
+            { category: "Renal", condition: "Diabetic Nephropathy", subtypes: "Diabetic Kidney Disease", description: "High blood sugar destroying renal capillaries.", symptoms: "Worsening BP, foamy urine, swelling", allopathic: "SGLT2 inhibitors, ACEi/ARBs", ayurvedic: "Shilajit, Amalaki, Asanadi Gana", homeopathic: "Syzygium Jambolanum, Uranium Nit" },
+            { category: "Renal", condition: "Hypertensive Nephrosclerosis", subtypes: "N/A", description: "Chronic high blood pressure hardening renal vessels.", symptoms: "Resistant BP, fatigue, proteinuria", allopathic: "Strict BP control (<130/80 mmHg)", ayurvedic: "Sarpagandha, Arjuna, Gokshuradi", homeopathic: "Glonoinum, Baryta Muriatica" },
+            { category: "Renal", condition: "CINAC", subtypes: "Agricultural Community Nephritis", description: "Environmental tubulopathy from heat, metals, agrochemicals.", symptoms: "Muscle cramps, severe dehydration, fatigue", allopathic: "Removal from toxins, oral rehydration", ayurvedic: "Usheera cooling infusions", homeopathic: "Cuprum Met, Veratrum Album" },
+            { category: "Urological", condition: "Kidney Stones (Nephrolithiasis)", subtypes: "Calcium, Uric Acid, Struvite", description: "Mineral deposits blocking urine flow in pelvis/ureter.", symptoms: "Agonizing flank pain, pink urine, nausea", allopathic: "Tamsulosin, ESWL lithotripsy, PCNL", ayurvedic: "Pashanbhed, Kultha, Varuna", homeopathic: "Berberis Vulgaris, Lycopodium" },
+            { category: "Urological", condition: "Kidney Infection (Pyelonephritis)", subtypes: "Acute vs Chronic", description: "Bacterial UTI spreading up into kidneys.", symptoms: "High fever, chills, severe flank pain", allopathic: "Empiric IV Ceftriaxone, Fluoroquinolones", ayurvedic: "Chandan, Usheera (Mutravirechaniya)", homeopathic: "Cantharis, Mercurius Corrosivus" },
+            { category: "Urological", condition: "Hydronephrosis", subtypes: "Unilateral vs Bilateral", description: "Swelling of kidney due to urine obstruction backup.", symptoms: "Flank pain, fullness, urination changes", allopathic: "Ureteral stenting, Nephrostomy", ayurvedic: "Vata-Anulomana relief protocols", homeopathic: "Hydrangea arborescens, Pareira" }
+        ];
+
+        function renderTable(data) {
+            const tbody = document.getElementById('matrixTableBody');
+            tbody.innerHTML = '';
+            data.forEach(item => {
+                let badgeClass = "badge-nephro";
+                if (item.category === "Renal") badgeClass = "badge-renal";
+                if (item.category === "Urological") badgeClass = "badge-uro";
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><span class="badge badge-cat ${badgeClass}">${item.category}</span></td>
+                    <td class="fw-bold text-dark-teal">${item.condition}</td>
+                    <td><small class="text-muted">${item.subtypes}</small></td>
+                    <td>${item.description}</td>
+                    <td><small>${item.symptoms}</small></td>
+                    <td><span class="text-primary fw-semibold">${item.allopathic}</span></td>
+                    <td><span class="text-success">${item.ayurvedic}</span></td>
+                    <td><span class="text-secondary">${item.homeopathic}</span></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        renderTable(matrixData);
+
+        document.getElementById('searchMatrix').addEventListener('input', filterData);
+        document.getElementById('filterCategory').addEventListener('change', filterData);
+
+        function filterData() {
+            const searchVal = document.getElementById('searchMatrix').value.toLowerCase();
+            const catVal = document.getElementById('filterCategory').value;
+
+            const filtered = matrixData.filter(item => {
+                const matchesSearch = item.condition.toLowerCase().includes(searchVal) || 
+                                      item.symptoms.toLowerCase().includes(searchVal) ||
+                                      item.allopathic.toLowerCase().includes(searchVal);
+                const matchesCat = catVal === 'All' || item.category === catVal;
+                return matchesSearch && matchesCat;
+            });
+
+            renderTable(filtered);
+        }
+
+        let currentCardIdx = 0;
+        function updateFlashcard() {
+            const card = matrixData[currentCardIdx];
+            document.getElementById('cardCategory').innerText = card.category;
+            document.getElementById('cardTitle').innerText = card.condition;
+            document.getElementById('cardSubtypes').innerText = 'Subtypes: ' + card.subtypes;
+            document.getElementById('cardSymptoms').innerText = card.symptoms;
+            document.getElementById('cardAllopathic').innerText = card.allopathic;
+            document.getElementById('cardAyurvedic').innerText = card.ayurvedic;
+            document.getElementById('cardHomeopathic').innerText = card.homeopathic;
+            document.getElementById('cardCounter').innerText = `Card ${currentCardIdx + 1} of ${matrixData.length}`;
+            document.getElementById('flashcard').classList.remove('flipped');
+        }
+
+        function flipCard() {
+            document.getElementById('flashcard').classList.toggle('flipped');
+        }
+
+        function nextCard() {
+            currentCardIdx = (currentCardIdx + 1) % matrixData.length;
+            updateFlashcard();
+        }
+
+        function prevCard() {
+            currentCardIdx = (currentCardIdx - 1 + matrixData.length) % matrixData.length;
+            updateFlashcard();
+        }
+
+        updateFlashcard();
+
+        function exportCSV() {
+            let csvContent = "data:text/csv;charset=utf-8,Category,Condition,Subtypes,Description,Symptoms,Allopathic,Ayurvedic,Homeopathic\n";
+            matrixData.forEach(row => {
+                csvContent += `"${row.category}","${row.condition}","${row.subtypes}","${row.description}","${row.symptoms}","${row.allopathic}","${row.ayurvedic}","${row.homeopathic}"\n`;
+            });
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "Kidney_Pathology_Matrix.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</body>
+</html>
